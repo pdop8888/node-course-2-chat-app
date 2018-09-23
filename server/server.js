@@ -5,6 +5,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const{generateMessage} = require('./utils/message');
+const{generateLocationMessage} = require('./utils/message');
 
 var app = express();
 const publicPath = path.join(__dirname, '../public');
@@ -23,7 +24,15 @@ io.on('connection', (socket) => {
     socket.on('createMessage', (message, callback) => {
         console.log('createMessage', message);
         io.emit('newMessage', generateMessage(message.from,message.text));
-        callback('This is a callback');
+        callback('This is a callback from the server');
+    });
+
+    // listener
+    socket.on('createLocationMessage', (coords) => {
+        // just text io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`));
+        // URL is nicer...
+        io.emit('newLocationMessage', 
+                 generateLocationMessage('Admin',coords.latitude,coords.longitude));
     });
 
     socket.on('disconnect', () => {
