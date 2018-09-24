@@ -75,7 +75,6 @@ socket.on('newLocationMessage', function (message) {
     var textBox = jQuery('[name=message]');
 
     socket.emit('createMessage', {
-      from: 'User',
       text: textBox.val() // selector
     }, function () {
       textBox.val('');
